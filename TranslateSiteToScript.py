@@ -1,5 +1,8 @@
 import json 
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+
 
 baseUrl = ''
 
@@ -37,8 +40,18 @@ def translateTestEntry(entryJson):
             print(selenium_cmd)
             element = eval(selenium_cmd)
             element.click()
-        else:
-            print(command)
+        elif command['command'] == 'type':
+            target = command['target']
+            target_id = target[target.find("=")+1:]
+            selenium_cmd = 'driver.find_element_by_id("'+target_id+'")'
+            print(selenium_cmd)
+            element = eval(selenium_cmd)
+            element.send_keys(command['value'])
+
+            element.send_keys(Keys.ENTER)
+    
+    driver.implicitly_wait(10)
+    driver.get_screenshot_as_png()
     driver.close()
 
 if __name__ == "__main__":
